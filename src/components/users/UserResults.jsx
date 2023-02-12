@@ -1,27 +1,16 @@
 import React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useContext } from "react";
 import Spinner from "../layout/Spinner";
 import UserItem from "./UserItem";
+import GithubContext from "../../context/github/GithubContext";
 function UserResults() {
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { users, loading, fetchUsers } = useContext(GithubContext);
+
   useEffect(() => {
     fetchUsers();
   }, []);
   // no dependency as we just want it to load when the components are run, when the coponent loads
 
-  const fetchUsers = async () => {
-    const response = await fetch(`${process.env.REACT_APP_GITHUB_API}/users`, {
-      header: {
-        Authorization: `token ${process.env.REACT_APP_MYGITHUB_TOKEN}`,
-      },
-    });
-
-    const data = await response.json();
-
-    setUsers(data);
-    setLoading(false);
-  };
   //   to include a token we inlcude it in the authorization header
   if (!loading) {
     return (

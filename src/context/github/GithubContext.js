@@ -35,7 +35,9 @@ export const GithubProvider = ({ children }) => {
       payload: items,
     });
     // dispatch takes in an *action* object, type of which will be a string all UPPERCASE
+    // clear users from state
   };
+  const clearUsers = () => dispatch({ type: "CLEAR_USERS" });
   return (
     <GithubContext.Provider
       value={{
@@ -43,6 +45,7 @@ export const GithubProvider = ({ children }) => {
         // state.users as now we are dealing with the state, dispatch is updating this state
         loading: state.loading,
         searchUsers,
+        clearUsers,
       }}
     >
       {children}

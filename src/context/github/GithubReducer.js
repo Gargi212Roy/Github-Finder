@@ -15,6 +15,11 @@ const githubReducer = (state, action) => {
         loading: true,
       };
     // whenever we set anything in the state we use reducers
+    case "CLEAR_USERS":
+      return {
+        ...state,
+        users: [],
+      };
     default:
       return state;
   }

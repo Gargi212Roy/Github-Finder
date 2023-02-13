@@ -1,14 +1,11 @@
 import React from "react";
-import { useEffect, useContext } from "react";
+import { useContext } from "react";
 import Spinner from "../layout/Spinner";
 import UserItem from "./UserItem";
 import GithubContext from "../../context/github/GithubContext";
 function UserResults() {
-  const { users, loading, fetchUsers } = useContext(GithubContext);
+  const { users, loading } = useContext(GithubContext);
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
   // no dependency as we just want it to load when the components are run, when the coponent loads
 
   //   to include a token we inlcude it in the authorization header

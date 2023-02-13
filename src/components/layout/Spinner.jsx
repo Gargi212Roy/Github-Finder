@@ -1,5 +1,5 @@
 import React from "react";
-import Gif from "./assets/Gif.gif";
+import Gif2 from "./assets/Gif2.gif";
 
 function Spinner() {
   return (
@@ -7,7 +7,7 @@ function Spinner() {
       <img
         width={180}
         className="text-center mx-auto"
-        src={Gif}
+        src={Gif2}
         alt="Loading ..."
       />
     </div>

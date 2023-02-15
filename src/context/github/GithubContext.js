@@ -8,6 +8,8 @@ const GITHUB_TOKEN = process.env.REACT_APP_MYGITHUB_TOKEN;
 export const GithubProvider = ({ children }) => {
   const initialState = {
     users: [],
+    user: {},
+    // an empty obj by default, when we fetch the user we want to fill it with that user
     loading: false,
   };
   const [state, dispatch] = useReducer(githubReducer, initialState);
@@ -34,9 +36,33 @@ export const GithubProvider = ({ children }) => {
       type: "GET_USERS",
       payload: items,
     });
-    // dispatch takes in an *action* object, type of which will be a string all UPPERCASE
-    // clear users from state
   };
+  // dispatch takes in an *action* object, type of which will be a string all UPPERCASE
+
+  // get single user
+  const getUser = async (login) => {
+    // set LOADing
+    const setLoading = () => dispatch({ type: "SET_LOADING" });
+    setLoading();
+
+    const response = await fetch(`${GITHUB_URL}/users/${login}`, {
+      header: {
+        Authorization: `token ${GITHUB_TOKEN}`,
+      },
+    });
+    if (response.status === 404) {
+      window.location = "/notfound";
+    } else {
+      const data = await response.json();
+
+      dispatch({
+        type: "GET_USER",
+        payload: data,
+      });
+    }
+  };
+  // clear users from state
+
   const clearUsers = () => dispatch({ type: "CLEAR_USERS" });
   return (
     <GithubContext.Provider
@@ -44,8 +70,10 @@ export const GithubProvider = ({ children }) => {
         users: state.users,
         // state.users as now we are dealing with the state, dispatch is updating this state
         loading: state.loading,
+        user: state.user,
         searchUsers,
         clearUsers,
+        getUser,
       }}
     >
       {children}

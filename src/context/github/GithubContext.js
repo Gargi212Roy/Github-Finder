@@ -95,11 +95,8 @@ export const GithubProvider = ({ children }) => {
   return (
     <GithubContext.Provider
       value={{
-        users: state.users,
-        // state.users as now we are dealing with the state, dispatch is updating this state
-        loading: state.loading,
-        user: state.user,
-        repos: state.repos,
+        ...state,
+
         searchUsers,
         clearUsers,
         getUser,

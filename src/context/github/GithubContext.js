@@ -10,6 +10,7 @@ export const GithubProvider = ({ children }) => {
     users: [],
     user: {},
     // an empty obj by default, when we fetch the user we want to fill it with that user
+    repos: [],
     loading: false,
   };
   const [state, dispatch] = useReducer(githubReducer, initialState);
@@ -61,6 +62,33 @@ export const GithubProvider = ({ children }) => {
       });
     }
   };
+
+  // get user Repos
+  const getUserRepos = async (login) => {
+    // set LOADing
+    const setLoading = () => dispatch({ type: "SET_LOADING" });
+    setLoading();
+    const params = new URLSearchParams({
+      sort: "created",
+      per_page: 10,
+    });
+
+    const response = await fetch(
+      `${GITHUB_URL}/users/${login}/repos?${params}`,
+      {
+        header: {
+          Authorization: `token ${GITHUB_TOKEN}`,
+        },
+      }
+    );
+
+    const data = await response.json();
+    dispatch({
+      type: "GET_REPOS",
+      payload: data,
+    });
+  };
+
   // clear users from state
 
   const clearUsers = () => dispatch({ type: "CLEAR_USERS" });
@@ -71,9 +99,11 @@ export const GithubProvider = ({ children }) => {
         // state.users as now we are dealing with the state, dispatch is updating this state
         loading: state.loading,
         user: state.user,
+        repos: state.repos,
         searchUsers,
         clearUsers,
         getUser,
+        getUserRepos,
       }}
     >
       {children}
